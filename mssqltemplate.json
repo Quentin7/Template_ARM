@@ -65,21 +65,21 @@
                       "port": 1433
                     }
                   ],
-                  "volumes": [
-                    {
-                      "name": "mssql-data",
-                      "azureFile": {
-                        "shareName": "mssql",
-                        "storageAccountName": "webzine",
-                        "storageAccountKey": "EvCQK4E9U7mjdsDEGGimPRmkmM8RvUwKGgP9l6epBy8Yn9Frbw3vM9f/A6tndCBDzDYvOZY5hahtZCBrj6xRng=="
-                      }
-                    }
-                  ],
                     "ip": "20.54.141.116",
                     "type": "Public",
                     "dnsNameLabel": "[parameters('containerGroups_mssql_name')]"
                 },
-                "osType": "Linux"
+                "osType": "Linux",
+                "volumes": [
+                    {
+                        "name": "mssql-data",
+                        "azureFile": {
+                            "shareName": "mssql",
+                            "storageAccountName": "webzine",
+                            "storageAccountKey": "EvCQK4E9U7mjdsDEGGimPRmkmM8RvUwKGgP9l6epBy8Yn9Frbw3vM9f/A6tndCBDzDYvOZY5hahtZCBrj6xRng=="
+                        }
+                    }
+                ]
             }
         }
     ]
