@@ -1,0 +1,86 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "containerGroups_mssql_name": {
+            "defaultValue": "mssql",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.ContainerInstance/containerGroups",
+            "apiVersion": "2019-12-01",
+            "name": "[parameters('containerGroups_mssql_name')]",
+            "location": "westeurope",
+            "properties": {
+                "sku": "Standard",
+                "containers": [
+                    {
+                        "name": "[parameters('containerGroups_mssql_name')]",
+                        "properties": {
+                            "image": "[concat('mcr.microsoft.com/', parameters('containerGroups_mssql_name'), '/server:2019-latest')]",
+                            "ports": [
+                                {
+                                    "protocol": "TCP",
+                                    "port": 1433
+                                }
+                            ],
+                            "environmentVariables": [
+                                {
+                                    "name": "ACCEPT_EULA",
+                                    "value": "Y"
+                                },
+                                {
+                                    "name": "MSSQL_PID",
+                                    "value": "Enterprise"
+                                },
+                                {
+                                    "name": "MSSQL_SA_PASSWORD",
+                                    "value": "Azerty@123"
+                                }
+                            ],
+                            "volumeMounts": [
+                            {
+                              "name": "mssql-data",
+                              "mountPath": "/var/log/mssql"
+                            }
+                            ],
+                            "resources": {
+                              "requests": {
+                                "memoryInGB": 2,
+                                "cpu": 1
+                              }
+                            }
+                        }
+                    }
+                ],
+                "initContainers": [],
+                "restartPolicy": "OnFailure",
+                "ipAddress": {
+                  "ports": [
+                    {
+                      "protocol": "TCP",
+                      "port": 1433
+                    }
+                  ],
+                  "volumes": [
+                    {
+                      "name": "mssql-data",
+                      "azureFile": {
+                        "shareName": "mssql",
+                        "storageAccountName": "webzine",
+                        "storageAccountKey": "EvCQK4E9U7mjdsDEGGimPRmkmM8RvUwKGgP9l6epBy8Yn9Frbw3vM9f/A6tndCBDzDYvOZY5hahtZCBrj6xRng=="
+                      }
+                    }
+                  ],
+                    "ip": "20.54.141.116",
+                    "type": "Public",
+                    "dnsNameLabel": "[parameters('containerGroups_mssql_name')]"
+                },
+                "osType": "Linux"
+            }
+        }
+    ]
+}
